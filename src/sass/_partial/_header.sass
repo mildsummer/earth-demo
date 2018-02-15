@@ -1,0 +1,101 @@
+.header
+  position: relative
+  padding: 42px 30px 2px
+  overflow: hidden
+  z-index: 1
+  .not-touch-device &:hover &-menu
+    opacity: 1 !important
+  &--small &-menu
+    opacity: 0
+    transform: translate3d(0, -22px, 0)
+  &--small &__title
+    transform: translate3d(0, -22px, 0)
+  &--small &-sub-menu
+    transform: translate3d(0, -22px, 0)
+  &__title
+    text-indent: 100%
+    white-space: nowrap
+    margin: 0 auto
+    height: 17.5px
+    width: 105px
+    position: relative
+    transition: transform 1000ms ease
+    &::after
+      font-icon: url(#{$svgPath}/logo.svg)
+      position: absolute
+      top: 0
+      left: 0
+      width: 105px
+      text-indent: 0
+      text-align: center
+      font-size: 17.5px
+
+  &-menu
+    display: flex
+    justify-content: center
+    margin-top: 35px
+    transition: all 1000ms ease
+    &__item
+      font-size: 13px
+      letter-spacing: 2.17px
+    &__link
+      position: relative
+      padding: 20px
+      .not-touch-device &:hover::after
+        transform: none
+      &::after
+        content: ''
+        display: block
+        height: 1px
+        width: calc(100% - 40px)
+        position: absolute
+        left: 20px
+        bottom: 17px
+        background-color: rgba($baseText, 0.5)
+        transform: scaleX(0)
+        transform-origin: left
+        transition: transform 800ms cubic-bezier(0.86, 0, 0.07, 1)
+
+  &-sub-menu
+    position: absolute
+    top: 34px
+    right: 60px
+    display: flex
+    transition: transform 1000ms ease
+    &__item
+      font-size: 11px
+      letter-spacing: 1.83px
+      &--cart
+        padding-right: 10px
+        &::after
+          font-icon: url(#{$svgPath}/shopping-bag.svg)
+          color: rgba($baseText, 0.2)
+          font-size: 19px
+          position: absolute
+          right: -2px
+          top: -9px
+        &::before
+          content: attr(aria-num)
+          font-size: 10px
+          letter-spacing: 0
+          position: absolute
+          right: 2px
+          width: 14px
+          text-align: center
+    &__link
+      position: relative
+      padding: 13.75px
+      .not-touch-device &:hover::after
+        transform: none
+      &::after
+        content: ''
+        display: block
+        height: 1px
+        width: calc(100% - 27.5px)
+        position: absolute
+        left: 13.75px
+        bottom: 10px
+        background-color: rgba($baseText, 0.5)
+        transform: scaleX(0)
+        transform-origin: left
+        transition: transform 800ms $accentCurve

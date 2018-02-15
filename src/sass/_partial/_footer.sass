@@ -1,0 +1,137 @@
+.footer
+  padding: 140px 120px 0
+  &__inner
+    width: 100%
+    border-top: solid 1px #D9D9D9
+    display: flex
+    justify-content: space-between
+  &__main
+    margin: 75px 0 74px
+  &__sub
+    margin: 61px 0 0
+    padding: 0 10px 0 0
+  &-menu
+    margin: 0
+    &__item
+      font-size: 12px
+      letter-spacing: 2px
+      margin-right: 10px
+      display: inline-block
+      &:last-child
+        margin-right: 0
+    &__link
+      position: relative
+      padding: 10px
+      .not-touch-device &:hover::after
+        transform: none
+      &::after
+        content: ''
+        display: block
+        height: 1px
+        width: calc(100% - 20px)
+        position: absolute
+        left: 10px
+        bottom: 6.25px
+        background-color: rgba($baseText, 0.5)
+        transform: scaleX(0)
+        transform-origin: left
+        transition: transform 800ms $accentCurve
+  &-sub-menu
+    display: flex
+    margin: 65px 0 0 0
+    &__item
+      position: relative
+      font-size: 11px
+      color: #999999
+      font-family: sans-serif
+      letter-spacing: 0.31px
+      &::after
+        content: ''
+        display: block
+        width: 1px
+        height: 12px
+        background-color: #E5E5E5
+        position: absolute
+        top: 0
+        right: -0.5px
+      &:last-child::after
+        content: none
+    &__link
+      padding: 10px
+      transition: color 300ms ease
+      .not-touch-device &:hover
+        color: $baseText
+
+  &-share
+    display: flex
+    float: left
+    margin: 1px 21px 0 0
+    &__item
+      width: 34px
+      height: 34px
+      color: transparent
+      overflow: hidden
+      margin-right: 5px
+      &:last-child
+        margin-right: 0
+    &__item--facebook &__link::after
+      font-icon: url(#{$svgPath}/facebook.svg)
+    &__item--twitter &__link::after
+      font-icon: url(#{$svgPath}/twitter.svg)
+    &__item--instagram &__link::after
+      font-icon: url(#{$svgPath}/instagram.svg)
+    &__item--line &__link::after
+      font-icon: url(#{$svgPath}/line.svg)
+    &__link
+      position: relative
+      display: block
+      width: 100%
+      height: 100%
+      .not-touch-device &:hover::after
+        color: #999999
+      &::after
+        position: absolute
+        top: 50%
+        left: 50%
+        width: 14
+        height: 14
+        font-size: 14px
+        margin: -7px
+        color: $baseText
+        transition: color 300ms ease
+  &__link-button
+    position: relative
+    display: inline-block
+    width: 140px
+    height: 40px
+    padding: 0 20px
+    font-size: 12px
+    letter-spacing: 2px
+    text-align: center
+    box-sizing: border-box
+    line-height: 40px
+    border: solid 1px #979797
+    transition: color 500ms $accentCurve
+    .not-touch-device &:hover
+      color: #fff
+      &::after
+        transform: none
+    &::after
+      content: ''
+      display: block
+      width: 100%
+      height: 100%
+      position: absolute
+      top: 0
+      left: 0
+      transform: scale3d(0, 1, 1)
+      transition: transform 500ms $accentCurve
+      background-color: #979797
+      z-index: -1
+      transform-origin: left
+
+  &__copy-right
+    font-size: 11px
+    letter-spacing: 1.83px
+    text-align: right
+    margin-top: 59px

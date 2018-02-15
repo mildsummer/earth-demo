@@ -1,0 +1,17 @@
+.nav
+  opacity: 0
+  position: fixed
+  top: 50vh
+  width: 1px
+  height: 300px
+  background-color: #E6E6E6
+  margin-top: -150px
+  right: 29px
+  transition: opacity 800ms ease
+  &__current
+    position: absolute
+    top: 0
+    width: 100%
+    height: 20px
+    background-color: $baseText
+    transition: top 800ms cubic-bezier(0.77, 0, 0.175, 1)
