@@ -48,6 +48,10 @@ module.exports = {
           header: true,
           skipEmptyLines: true
         }
+      },
+      {
+        test: /\.(fs|vs)$/,
+        use: 'raw-loader'
       }
     ]
   },
