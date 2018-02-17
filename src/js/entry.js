@@ -1,6 +1,8 @@
 import '../sass/style.sass';
 import vertexShader from '../shaders/main.vs';
 import fragmentShader from '../shaders/main.fs';
+import lineVertexShader from '../shaders/line.vs';
+import lineFragmentShader from '../shaders/line.fs';
 import latLngsData from '../data/latLngs.csv';
 import LatLng from './LatLng';
 
@@ -29,6 +31,21 @@ class Earth {
 
     // 形状データを作成
     this.geometry = new THREE.BufferGeometry();
+    this.lines = new THREE.Group();
+    this.lineMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        time: {
+          type: 'f',
+          value: 0.0
+        }
+      },
+      vertexShader: lineVertexShader,
+      fragmentShader: lineFragmentShader,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+    this.lineMaterial.linewidth = 1;
 
     const SIZE = 300;
     const vertices_base = [];
@@ -42,6 +59,25 @@ class Earth {
       const v = 0.8 + (Math.random() * 0.2);
       colors_base.push(h, s, v);
       sizes_base.push((Math.random() * 50) + 50);
+      if (Math.random() > 0.8) {
+        const lineGeometry = new THREE.BufferGeometry();
+        const line_vertices_base = [];
+        const line_colors_base = [];
+        line_vertices_base.push(vec3.x, vec3.y, vec3.z);
+        line_vertices_base.push(vec3.x * 1.005, vec3.y * 1.005, vec3.z * 1.005);
+        line_colors_base.push(h, s, v);
+        line_colors_base.push(h, s, v);
+        const line_vertices = new Float32Array(line_vertices_base);
+        const line_colors = new Float32Array(line_colors_base);
+        const line_is_end = new Float32Array([0, 1]);
+        const line_length = new Float32Array([1, 1 + (Math.random() * 0.2)]);
+        lineGeometry.addAttribute('position', new THREE.BufferAttribute(line_vertices, 3));
+        lineGeometry.addAttribute('color', new THREE.BufferAttribute(line_colors, 3));
+        lineGeometry.addAttribute('is_end', new THREE.BufferAttribute(line_is_end, 1));
+        lineGeometry.addAttribute('length', new THREE.BufferAttribute(line_length, 1));
+        const line = new THREE.Line(lineGeometry, this.lineMaterial, THREE.LineStrip);
+        this.lines.add(line);
+      }
     });
     const vertices = new Float32Array(vertices_base);
     this.geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
@@ -71,6 +107,7 @@ class Earth {
     // 物体を作成
     this.points = new THREE.Points(this.geometry, this.material);
     this.scene.add(this.points);
+    this.scene.add(this.lines);
 
     this.tick = this.tick.bind(this);
     this.tick();
@@ -122,9 +159,10 @@ class Earth {
    * アニメーションの毎フレーム呼ばれる
    */
   tick() {
-    this.points.rotation.set(0, this.points.rotation.y - 0.003, 0);
+    this.scene.rotation.set(0, this.scene.rotation.y - 0.003, 0);
     // シェーダーに渡すtime変数の値を変える
     this.material.uniforms.time.value += 0.1;
+    this.lineMaterial.uniforms.time.value += 0.1;
     const to = new THREE.Vector3(
       this.mouseX - (window.innerWidth / 2),
       this.mouseY - (window.innerHeight / 2),
