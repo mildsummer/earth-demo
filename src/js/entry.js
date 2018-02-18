@@ -64,7 +64,7 @@ class Earth {
         const line_vertices_base = [];
         const line_colors_base = [];
         line_vertices_base.push(vec3.x, vec3.y, vec3.z);
-        line_vertices_base.push(vec3.x * 1.005, vec3.y * 1.005, vec3.z * 1.005);
+        line_vertices_base.push(vec3.x * 1.05, vec3.y * 1.05, vec3.z * 1.05);
         line_colors_base.push(h, s, v);
         line_colors_base.push(h, s, v);
         const line_vertices = new Float32Array(line_vertices_base);

@@ -7,6 +7,7 @@ uniform float time;
 varying vec4 vMvPosition;
 varying vec3 vColor;
 varying float vStrength;
+varying float vNearEnd;
 
 float mod289(float x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
 vec4 mod289(vec4 x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
@@ -43,6 +44,7 @@ void main() {
   vMvPosition = mvPosition;
   vColor = color;
   vStrength = noiseValue;
+  vNearEnd = is_end;
 
   gl_Position = projectionMatrix * mvPosition;
 }
