@@ -41,6 +41,6 @@ void main() {
   float h = max(0.0, color.x - noiseValue * noiseValue * 10.0);
   vColor = vec3(h, color.yz);
 
-  gl_PointSize = (size + sin(radians(time * 300.0) * 40.0 - 10.0)) * (200.0 / length(mvPosition.xyz));
+  gl_PointSize = 10.0 + (noiseValue * noiseValue * 10000.0) * (200.0 / length(mvPosition.xyz));
   gl_Position = projectionMatrix * mvPosition;
 }
