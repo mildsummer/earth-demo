@@ -158,6 +158,16 @@ class Earth {
   }
 
   /**
+   * @param {number} width
+   * @param {number} height
+   */
+  resize(width, height) {
+    this.renderer.setSize(width, height);
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+  }
+
+  /**
    * アニメーションの毎フレーム呼ばれる
    */
   tick() {
@@ -192,3 +202,6 @@ stats.domElement.style.left = '0px';
 stats.domElement.style.top = '0px';
 document.body.appendChild(stats.domElement);
 window.earth = new Earth(document.querySelector('canvas'), window.innerWidth, window.innerHeight, stats);
+window.addEventListener('resize', () => {
+  window.earth.resize(window.innerWidth, window.innerHeight);
+});
