@@ -1,3 +1,4 @@
+import Stats from 'stats-js';
 import '../sass/style.sass';
 import vertexShader from '../shaders/main.vs';
 import fragmentShader from '../shaders/main.fs';
@@ -13,8 +14,9 @@ const latLngs = latLngsData.map(({ lat, lng }) => (new LatLng(lat, lng)));
 const CAMERA_DISTANCE = 1000;
 
 class Earth {
-  constructor(canvas, width, height) {
+  constructor(canvas, width, height, stats) {
     this.time = 0;
+    this.stats = stats;
 
     this.renderer = new THREE.WebGLRenderer({ canvas });
     this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -159,6 +161,7 @@ class Earth {
    * アニメーションの毎フレーム呼ばれる
    */
   tick() {
+    this.stats.begin();
     this.scene.rotation.set(0, this.scene.rotation.y - 0.003, 0);
     // シェーダーに渡すtime変数の値を変える
     this.material.uniforms.time.value += 0.1;
@@ -177,8 +180,15 @@ class Earth {
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     // レンダリング
     this.renderer.render(this.scene, this.camera);
+    this.stats.end();
     requestAnimationFrame(this.tick);
   }
 }
 
-window.earth = new Earth(document.querySelector('canvas'), window.innerWidth, window.innerHeight);
+const stats = new Stats();
+stats.setMode(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.left = '0px';
+stats.domElement.style.top = '0px';
+document.body.appendChild(stats.domElement);
+window.earth = new Earth(document.querySelector('canvas'), window.innerWidth, window.innerHeight, stats);
