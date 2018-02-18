@@ -7,14 +7,12 @@ import lineFragmentShader from '../shaders/line.fs';
 import latLngsData from '../data/latLngs.csv';
 import LatLng from './LatLng';
 
-const { THREE } = window;
-
 const latLngs = latLngsData.map(({ lat, lng }) => (new LatLng(lat, lng)));
-
-const CAMERA_DISTANCE = 1000;
 
 class Earth {
   constructor(canvas, width, height, stats) {
+    this.CAMERA_DISTANCE = 1000;
+
     this.time = 0;
     this.stats = stats;
 
@@ -28,7 +26,7 @@ class Earth {
 
     // カメラを作成
     this.camera = new THREE.PerspectiveCamera(45, width / height);
-    this.camera.position.set(0, 0, CAMERA_DISTANCE);
+    this.camera.position.set(0, 0, this.CAMERA_DISTANCE);
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     // 形状データを作成
@@ -179,13 +177,13 @@ class Earth {
     const to = new THREE.Vector3(
       this.mouseX - (window.innerWidth / 2),
       this.mouseY - (window.innerHeight / 2),
-      CAMERA_DISTANCE
+      this.CAMERA_DISTANCE
     );
     const currentPosition = this.camera.position;
     this.camera.position.set(
       (currentPosition.x * 0.97) + (to.x * 0.03),
       (currentPosition.y * 0.97) + (to.y * 0.03),
-      CAMERA_DISTANCE
+      this.CAMERA_DISTANCE
     );
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     // レンダリング
