@@ -31,26 +31,16 @@ class Earth {
 
     // 形状データを作成
     this.geometry = new THREE.BufferGeometry();
-    this.lines = new THREE.Group();
-    this.lineMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        time: {
-          type: 'f',
-          value: 0.0
-        }
-      },
-      vertexShader: lineVertexShader,
-      fragmentShader: lineFragmentShader,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
-    });
-    this.lineMaterial.linewidth = 1;
+    this.lineGeometry = new THREE.BufferGeometry();
 
     const SIZE = 300;
     const vertices_base = [];
     const colors_base = [];
     const sizes_base = [];
+    const line_vertices_base = [];
+    const line_colors_base = [];
+    const line_size_base = [];
+    const line_is_end_base = [];
     latLngs.forEach((latLng) => {
       const vec3 = latLng.toXYZ(SIZE);
       vertices_base.push(vec3.x, vec3.y, vec3.z);
@@ -58,25 +48,19 @@ class Earth {
       const s = 0.8 + (Math.random() * 0.2);
       const v = 0.8 + (Math.random() * 0.2);
       colors_base.push(h, s, v);
-      sizes_base.push((Math.random() * 50) + 50);
-      if (Math.random() > 0.8) {
-        const lineGeometry = new THREE.BufferGeometry();
-        const line_vertices_base = [];
-        const line_colors_base = [];
-        line_vertices_base.push(vec3.x, vec3.y, vec3.z);
-        line_vertices_base.push(vec3.x * 1.05, vec3.y * 1.05, vec3.z * 1.05);
-        line_colors_base.push(h, s, v);
-        line_colors_base.push(h, s, v);
-        const line_vertices = new Float32Array(line_vertices_base);
-        const line_colors = new Float32Array(line_colors_base);
-        const line_is_end = new Float32Array([0, 1]);
-        const line_length = new Float32Array([1, 1 + (Math.random() * 0.2)]);
-        lineGeometry.addAttribute('position', new THREE.BufferAttribute(line_vertices, 3));
-        lineGeometry.addAttribute('color', new THREE.BufferAttribute(line_colors, 3));
-        lineGeometry.addAttribute('is_end', new THREE.BufferAttribute(line_is_end, 1));
-        lineGeometry.addAttribute('length', new THREE.BufferAttribute(line_length, 1));
-        const line = new THREE.Line(lineGeometry, this.lineMaterial, THREE.LineStrip);
-        this.lines.add(line);
+      sizes_base.push((Math.random() * 50) + 100);
+      if (Math.random() > 0.6) {
+        const dist = 0.04;
+        const min = (Math.random() * 0.3) + 0.4;
+        const max = (Math.random() * 0.5) + 1;
+        for (let i = min; i <= max; i += dist) {
+          line_vertices_base.push(vec3.x * i, vec3.y * i, vec3.z * i);
+          line_colors_base.push(h, s, v);
+          line_colors_base.push(h, s, v);
+          const is_end = 1 / max;
+          line_size_base.push(((Math.random() * 10) + 0.5) * is_end * 0.3);
+          line_is_end_base.push(is_end);
+        }
       }
     });
     const vertices = new Float32Array(vertices_base);
@@ -85,6 +69,14 @@ class Earth {
     this.geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
     const sizes = new Float32Array(sizes_base);
     this.geometry.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    const line_vertices = new Float32Array(line_vertices_base);
+    this.lineGeometry.addAttribute('position', new THREE.BufferAttribute(line_vertices, 3));
+    const line_colors = new Float32Array(line_colors_base);
+    this.lineGeometry.addAttribute('color', new THREE.BufferAttribute(line_colors, 3));
+    const line_size = new Float32Array(line_size_base);
+    this.lineGeometry.addAttribute('size', new THREE.BufferAttribute(line_size, 1));
+    const line_is_end = new Float32Array(line_is_end_base);
+    this.lineGeometry.addAttribute('is_end', new THREE.BufferAttribute(line_is_end, 1));
 
     // material作成
     this.material = new THREE.ShaderMaterial({
@@ -106,6 +98,24 @@ class Earth {
     });
     // 物体を作成
     this.points = new THREE.Points(this.geometry, this.material);
+    this.lineMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        time: {
+          type: 'f',
+          value: 0.0
+        },
+        texture: {
+          type: 't',
+          value: Earth.createTexture()
+        }
+      },
+      vertexShader: lineVertexShader,
+      fragmentShader: lineFragmentShader,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+    this.lines = new THREE.Points(this.lineGeometry, this.lineMaterial);
     this.scene.add(this.points);
     this.scene.add(this.lines);
 
@@ -144,6 +154,31 @@ class Earth {
     grad.addColorStop(0.0, 'rgba(255, 255, 255, 1)');
     grad.addColorStop(0.2, 'rgba(255, 255, 255, 0.8)');
     grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.2)');
+    grad.addColorStop(1.0, 'rgba(255, 255, 255, 0)');
+    ctx.fillStyle = grad;
+    ctx.arc(64, 64, 64, 0, Math.PI / 180, true);
+    ctx.fill();
+
+    const texture = new THREE.Texture(canvas);
+    texture.minFilter = THREE.NearestFilter;
+    texture.needsUpdate = true;
+    return texture;
+  }
+
+  /**
+   * パーティクルのテクスチャを生成
+   * @returns {THREE.Texture}
+   */
+  static createLinePointTexture() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = 128;
+    canvas.height = 128;
+    const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    grad.addColorStop(0.0, 'rgba(255, 255, 255, 1)');
+    grad.addColorStop(0.6, 'rgba(255, 255, 255, 0.8)');
+    grad.addColorStop(0.8, 'rgba(255, 255, 255, 0.2)');
     grad.addColorStop(1.0, 'rgba(255, 255, 255, 0)');
     ctx.fillStyle = grad;
     ctx.arc(64, 64, 64, 0, Math.PI / 180, true);

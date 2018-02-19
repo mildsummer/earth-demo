@@ -1,13 +1,12 @@
 attribute vec3 color;
+attribute float size;
 attribute float is_end;
-attribute float length;
 
 uniform float time;
 
 varying vec4 vMvPosition;
 varying vec3 vColor;
 varying float vStrength;
-varying float vNearEnd;
 
 float mod289(float x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
 vec4 mod289(vec4 x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
@@ -36,15 +35,15 @@ float noise(vec3 p){
 }
 
 void main() {
-  float noiseValue = noise(vec3(position.x / 300.0 + time / 10.0, position.y / 300.0 + time / 10.0, position.z / 300.0 + time / 10.0));
-  vec3 position = position * (1.0 + noiseValue * 0.3 * is_end);
-  position = position * (1.0 + noiseValue * 0.1 * (1.0 - is_end));
-  position = position * length;
+  float noiseValue = noise(vec3(position.x / 300.0 + time / 10.0, position.y / 300.0 + time / 10.0, position.z / 300.0 + time / 10.0)) * 0.1;
+  // float scalar = noiseValue + 1.0;
+  // vec3 position = vec3(position.x * scalar, position.y * scalar, position.z * scalar);
   vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
   vMvPosition = mvPosition;
-  vColor = color;
-  vStrength = noiseValue;
-  vNearEnd = is_end;
+  float h = max(0.0, color.x - noiseValue * noiseValue * 10.0);
+  vColor = vec3(h, color.yz);
+  vStrength = (sin(time * 0.1) * 0.5 + 0.5) * is_end;
 
+  gl_PointSize = size * (noiseValue * noiseValue * 10000.0) * (200.0 / length(mvPosition.xyz));
   gl_Position = projectionMatrix * mvPosition;
 }
