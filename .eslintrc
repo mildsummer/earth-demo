@@ -8,9 +8,6 @@
   "globals": {
     "THREE": true
   },
-  "ecmaFeatures": {
-    "modules": true
-  },
   "settings": {
     "import/resolve": {
       "extenstions": [ ".es6", ".js", ".css", ".sass" ]
