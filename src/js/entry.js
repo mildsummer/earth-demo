@@ -48,7 +48,7 @@ class Earth {
       const s = 0.8 + (Math.random() * 0.2);
       const v = 0.8 + (Math.random() * 0.2);
       colors_base.push(h, s, v);
-      sizes_base.push(10);
+      sizes_base.push(20 + (Math.random() * 10));
       if (Math.random() > 0.7) {
         const dist = 0.04;
         const min = (Math.random() * 0.3) + 0.4;
