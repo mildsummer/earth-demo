@@ -34,7 +34,7 @@ float noise(vec3 p){
 }
 
 void main() {
-  float noiseValue = noise(vec3(position.x / 300.0 + time / 10.0, position.y / 300.0 + time / 10.0, position.z / 300.0 + time / 10.0)) * 0.1;
+  float noiseValue = noise(vec3(position.x / 300.0 + time / 10.0, position.y / 300.0 + time / 10.0, position.z / 300.0 + time / 10.0)) * 0.06;
   float scalar = noiseValue + 1.0;
   vec3 position = vec3(position.x * scalar, position.y * scalar, position.z * scalar);
   vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);

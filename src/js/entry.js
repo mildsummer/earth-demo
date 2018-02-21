@@ -19,7 +19,7 @@ class Earth {
     this.renderer = new THREE.WebGLRenderer({ canvas });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(width, height);
-    // this.renderer.setClearColor(0xffffff, 1);
+    this.renderer.setClearColor(0xffffff, 1);
 
     // シーンを作成
     this.scene = new THREE.Scene();
@@ -44,9 +44,9 @@ class Earth {
     latLngs.forEach((latLng) => {
       const vec3 = latLng.toXYZ(SIZE);
       vertices_base.push(vec3.x, vec3.y, vec3.z);
-      const h = 0.55;
-      const s = 0.8 + (Math.random() * 0.2);
-      const v = 0.8 + (Math.random() * 0.2);
+      const h = (199.25 / 360) + 0.05;
+      const s = (86.18 / 100) + ((Math.random() * 0.1) - 0.05);
+      const v = (85.10 / 100) + ((Math.random() * 0.1) - 0.05);
       colors_base.push(h, s, v);
       sizes_base.push(20 + (Math.random() * 10));
       if (Math.random() > 0.7) {
@@ -97,8 +97,7 @@ class Earth {
       vertexShader,
       fragmentShader,
       transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
+      depthWrite: false
     });
     // 物体を作成
     this.points = new THREE.Points(this.geometry, this.material);
@@ -120,8 +119,7 @@ class Earth {
       vertexShader: lineVertexShader,
       fragmentShader: lineFragmentShader,
       transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
+      depthWrite: false
     });
     this.lines = new THREE.Points(this.lineGeometry, this.lineMaterial);
     this.scene.add(this.points);
