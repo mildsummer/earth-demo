@@ -48,7 +48,7 @@ class Earth {
       const s = 0.8 + (Math.random() * 0.2);
       const v = 0.8 + (Math.random() * 0.2);
       colors_base.push(h, s, v);
-      sizes_base.push((Math.random() * 50) + 100);
+      sizes_base.push(10);
       if (Math.random() > 0.7) {
         const dist = 0.04;
         const min = (Math.random() * 0.3) + 0.4;
@@ -88,6 +88,10 @@ class Earth {
         texture: {
           type: 't',
           value: Earth.createTexture()
+        },
+        devicePixelRatio: {
+          type: 'f',
+          value: window.devicePixelRatio / 2
         }
       },
       vertexShader,
@@ -107,6 +111,10 @@ class Earth {
         texture: {
           type: 't',
           value: Earth.createTexture()
+        },
+        devicePixelRatio: {
+          type: 'f',
+          value: window.devicePixelRatio / 2
         }
       },
       vertexShader: lineVertexShader,

@@ -3,6 +3,7 @@ attribute float size;
 attribute float is_end;
 
 uniform float time;
+uniform float devicePixelRatio;
 
 varying vec4 vMvPosition;
 varying vec3 vColor;
@@ -44,6 +45,6 @@ void main() {
   vColor = vec3(h, color.yz);
   vStrength = (sin(time * 0.1) * 0.5 + 0.5) * is_end;
 
-  gl_PointSize = size * (noiseValue * noiseValue * 10000.0) * (200.0 / length(mvPosition.xyz));
+  gl_PointSize = size * (noiseValue * noiseValue * 10000.0) * (200.0 / length(mvPosition.xyz)) * devicePixelRatio;
   gl_Position = projectionMatrix * mvPosition;
 }
