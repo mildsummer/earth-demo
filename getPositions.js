@@ -1,6 +1,6 @@
 const Jimp = require('jimp');
 const fs = require('fs');
-const GOAL_LENGTH = 100;
+const GOAL_LENGTH = 200;
 const API_KEY = fs.readFileSync('.apikey');
 const outputFilePath = 'src/data/latLngs.csv';
 

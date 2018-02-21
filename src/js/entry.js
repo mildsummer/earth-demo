@@ -49,7 +49,7 @@ class Earth {
       const v = 0.8 + (Math.random() * 0.2);
       colors_base.push(h, s, v);
       sizes_base.push((Math.random() * 50) + 100);
-      if (Math.random() > 0.6) {
+      if (Math.random() > 0.7) {
         const dist = 0.04;
         const min = (Math.random() * 0.3) + 0.4;
         const max = (Math.random() * 0.5) + 1;
