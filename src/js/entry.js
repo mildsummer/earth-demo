@@ -44,9 +44,9 @@ class Earth {
     latLngs.forEach((latLng) => {
       const vec3 = latLng.toXYZ(SIZE);
       vertices_base.push(vec3.x, vec3.y, vec3.z);
-      const h = (199.25 / 360) + 0.05;
+      const h = (199.25 / 360);
       const s = (86.18 / 100) + ((Math.random() * 0.1) - 0.05);
-      const v = (85.10 / 100) + ((Math.random() * 0.1) - 0.05);
+      const v = (73 / 100) + ((Math.random() * 0.1) - 0.05);
       colors_base.push(h, s, v);
       sizes_base.push(20 + (Math.random() * 10));
       if (Math.random() > 0.7) {
