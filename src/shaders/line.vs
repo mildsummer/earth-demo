@@ -41,7 +41,7 @@ void main() {
   // vec3 position = vec3(position.x * scalar, position.y * scalar, position.z * scalar);
   vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
   vMvPosition = mvPosition;
-  float h = max(0.0, color.x - noiseValue * noiseValue * 10.0);
+  float h = max(0.0, color.x - noiseValue * noiseValue * 10.0 + 0.02);
   vColor = vec3(h, color.yz);
   vStrength = (sin(time * 0.1) * 0.5 + 0.5) * is_end;
 
